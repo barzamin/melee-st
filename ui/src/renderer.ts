@@ -1,3 +1,4 @@
+import Mousetrap from 'mousetrap';
 import './index.css';
 
 window.onload = init;
@@ -13,7 +14,7 @@ let charP1 = "Random";
 let charP2 = "Random";
 let skinP1 = "";
 let skinP2 = "";
-let colorP1, colorP2;
+let colorP1: string, colorP2: string;
 let currentP1WL = "Nada";
 let currentP2WL = "Nada";
 let currentBestOf = "Bo5";
@@ -22,31 +23,40 @@ let movedSettings = false;
 let charP1Active = false;
 
 
-const viewport = document.getElementById('viewport');
+const viewport = document.getElementById('viewport') as HTMLDivElement;
 
-const p1NameInp = document.getElementById('p1Name');
-const p1TagInp = document.getElementById('p1Tag');
-const p2NameInp = document.getElementById('p2Name');
-const p2TagInp = document.getElementById('p2Tag');
+const p1NameInp = document.getElementById('p1Name') as HTMLInputElement;
+const p1TagInp = document.getElementById('p1Tag') as HTMLInputElement;
+const p2NameInp = document.getElementById('p2Name') as HTMLInputElement;
+const p2TagInp = document.getElementById('p2Tag') as HTMLInputElement;
 
-const charImgP1 = document.getElementById('p1CharImg');
-const charImgP2 = document.getElementById('p2CharImg');
+const charImgP1 = document.getElementById('p1CharImg') as HTMLImageElement;
+const charImgP2 = document.getElementById('p2CharImg') as HTMLImageElement;
 
-const p1Win1 = document.getElementById('winP1-1');
-const p1Win2 = document.getElementById('winP1-2');
-const p1Win3 = document.getElementById('winP1-3');
-const p2Win1 = document.getElementById('winP2-1');
-const p2Win2 = document.getElementById('winP2-2');
-const p2Win3 = document.getElementById('winP2-3');
+const p1Win1 = document.getElementById('winP1-1') as HTMLInputElement;
+const p1Win2 = document.getElementById('winP1-2') as HTMLInputElement;
+const p1Win3 = document.getElementById('winP1-3') as HTMLInputElement;
+const p2Win1 = document.getElementById('winP2-1') as HTMLInputElement;
+const p2Win2 = document.getElementById('winP2-2') as HTMLInputElement;
+const p2Win3 = document.getElementById('winP2-3') as HTMLInputElement;
 
-const p1W = document.getElementById('p1W');
-const p1L = document.getElementById('p1L');
-const p2W = document.getElementById('p2W');
-const p2L = document.getElementById('p2L');
+const p1W = document.getElementById('p1W') as HTMLDivElement;
+const p1L = document.getElementById('p1L') as HTMLDivElement;
+const p2W = document.getElementById('p2W') as HTMLDivElement;
+const p2L = document.getElementById('p2L') as HTMLDivElement;
 
-const roundInp = document.getElementById('roundName');
+const roundInp = document.getElementById('roundName') as HTMLInputElement;
 
-const forceWL = document.getElementById('forceWLToggle');
+const forceWL = document.getElementById('forceWLToggle') as HTMLInputElement;
+
+const caster1NameEl = document.getElementById('cName1') as HTMLInputElement;
+const caster1TwitterEl = document.getElementById('cTwitter1') as HTMLInputElement;
+const caster1TwitchEl = document.getElementById('cTwitch1') as HTMLInputElement;
+const caster2NameEl = document.getElementById('cName2') as HTMLInputElement;
+const caster2TwitterEl = document.getElementById('cTwitter2') as HTMLInputElement;
+const caster2TwitchEl = document.getElementById('cTwitch2') as HTMLInputElement;
+
+const tournamentNameEl = document.getElementById('tournamentName') as HTMLInputElement;
 
 
 function init() {
@@ -155,7 +165,7 @@ function init() {
     Mousetrap.bind('esc', () => {
         if (movedSettings) { //if settings are open, close them
             goBack();
-        } else if (document.getElementById('charRoster').style.opacity == 1) {
+        } else if ((document.getElementById('charRoster') as HTMLDivElement).style.opacity == '1') {
             hideChars(); //if charRoster is visible, hide it
         } else {
             clearPlayers();
@@ -185,18 +195,19 @@ function goBack() {
 
 
 //called whenever we need to read a json file
-function getJson(fileName) {
+function getJson(fileName: string) {
     try {
         let settingsRaw = fs.readFileSync(mainPath + "/" + fileName + ".json");
         return JSON.parse(settingsRaw);
     } catch (error) {
+        console.error(`can't getJson("${fileName}"): ${error}`);
         return undefined;
     }
 }
 
 
 //will load the color list to a color slot combo box
-function loadColors(pNum) {
+function loadColors(pNum: number) {
     let colorList = getJson("InterfaceInfo"); //check the color list
 
     //for each color found, add them to the color list
@@ -295,7 +306,7 @@ function updateColor() {
 
 
 //change the image path depending on the character and skin
-function charImgChange(charImg, charName, skinName = "Default") {
+function charImgChange(charImg: HTMLImageElement, charName: string, skinName = "Default") {
     if (charName == "Random") {
         charImg.setAttribute('src', charPath + '/Portraits/Random.png');
     } else {
@@ -352,13 +363,13 @@ function openChars() {
 
     document.getElementById('charRoster').style.display = "flex"; //show the thing
     setTimeout( () => { //right after, change opacity and scale
-        document.getElementById('charRoster').style.opacity = 1;
+        document.getElementById('charRoster').style.opacity = '1';
         document.getElementById('charRoster').style.transform = "scale(1)";
     }, 0);
 }
 //to hide the character grid
 function hideChars() {
-    document.getElementById('charRoster').style.opacity = 0;
+    document.getElementById('charRoster').style.opacity = '0';
     document.getElementById('charRoster').style.transform = "scale(1.2)";
     setTimeout(() => {
         document.getElementById('charRoster').style.display = "none";
@@ -382,7 +393,7 @@ function changeCharacter() {
     }
 }
 //same as above but for the swap button
-function changeCharacterManual(char, pNum) {
+function changeCharacterManual(char: string, pNum: number) {
     document.getElementById('p'+pNum+'CharSelector').setAttribute('src', charPath + '/CSS/'+char+'.png');
     if (pNum == 1) {
         charP1 = char;
@@ -397,7 +408,7 @@ function changeCharacterManual(char, pNum) {
     }
 }
 //also called when we click those images
-function addSkinIcons(pNum) {
+function addSkinIcons(pNum: number) {
     document.getElementById('skinListP'+pNum).innerHTML = ''; //clear everything before adding
     let charInfo;
     if (pNum == 1) { //ahh the classic 'which character am i' check
@@ -427,7 +438,7 @@ function addSkinIcons(pNum) {
         }
         //if the character is Zelda, we also need to add sheik
         if (charP1 == "Zelda") {
-            if (!document.getElementById('skinListP1Sheik').children.length > 0) {
+            if (!(document.getElementById('skinListP1Sheik').children.length > 0)) {
                 for (let i = 0; i < charInfo.skinList.length; i++) {
                     let newImg = document.createElement('img');
                     newImg.className = "skinIcon";
@@ -450,7 +461,7 @@ function addSkinIcons(pNum) {
             document.getElementById('skinListP1Sheik').innerHTML = '';
         }
         if (charP2 == "Zelda") {
-            if (!document.getElementById('skinListP2Sheik').children.length > 0) {
+            if (!(document.getElementById('skinListP2Sheik').children.length > 0)) {
                 for (let i = 0; i < charInfo.skinList.length; i++) {
                     let newImg = document.createElement('img');
                     newImg.className = "skinIcon";
@@ -473,10 +484,11 @@ function addSkinIcons(pNum) {
     }
 
     //if the list only has 1 skin or none, hide the skin list
+    const skinSelectorPEl = document.getElementById('skinSelectorP'+pNum) as HTMLDivElement;
     if (document.getElementById('skinListP'+pNum).children.length <= 1) {
-        document.getElementById('skinSelectorP'+pNum).style.opacity = 0;
+        skinSelectorPEl.style.opacity = '0';
     } else {
-        document.getElementById('skinSelectorP'+pNum).style.opacity = 1;
+        skinSelectorPEl.style.opacity = '1';
     }
 }
 //whenever clicking on the skin images
@@ -498,8 +510,8 @@ function changeScoreTicks1() {
     }
 
     //deactivate wins 2 and 3
-    document.getElementById('winP'+pNum+'-2').checked = false;
-    document.getElementById('winP'+pNum+'-3').checked = false;
+    (document.getElementById('winP'+pNum+'-2') as HTMLInputElement).checked = false;
+    (document.getElementById('winP'+pNum+'-3') as HTMLInputElement).checked = false;
 }
 //whenever clicking on the second score tick
 function changeScoreTicks2() {
@@ -509,8 +521,8 @@ function changeScoreTicks2() {
     }
 
     //deactivate wins 2 and 3
-    document.getElementById('winP'+pNum+'-1').checked = true;
-    document.getElementById('winP'+pNum+'-3').checked = false;
+    (document.getElementById('winP'+pNum+'-1') as HTMLInputElement).checked = true;
+    (document.getElementById('winP'+pNum+'-3') as HTMLInputElement).checked = false;
 }
 //something something the third score tick
 function changeScoreTicks3() {
@@ -520,12 +532,12 @@ function changeScoreTicks3() {
     }
 
     //deactivate wins 2 and 3
-    document.getElementById('winP'+pNum+'-1').checked = true;
-    document.getElementById('winP'+pNum+'-2').checked = true;
+    (document.getElementById('winP'+pNum+'-1') as HTMLInputElement).checked = true;
+    (document.getElementById('winP'+pNum+'-2') as HTMLInputElement).checked = true;
 }
 
 //returns how much score does a player have
-function checkScore(tick1, tick2, tick3) {
+function checkScore(tick1: HTMLInputElement, tick2: HTMLInputElement, tick3: HTMLInputElement) {
     let totalScore = 0;
 
     if (tick1.checked) {
@@ -598,7 +610,7 @@ function deactivateWL() {
     currentP2WL = "Nada";
     document.getElementById;
 
-    pWLs = document.getElementsByClassName("wlBox");
+    const pWLs = document.getElementsByClassName("wlBox") as HTMLCollectionOf<HTMLDivElement>;
     for (let i = 0; i < pWLs.length; i++) {
         pWLs[i].style.color = "var(--text2)";
         pWLs[i].style.backgroundImage = "var(--bg4)";
@@ -612,7 +624,7 @@ function resizeInput() {
 }
 
 //changes the width of an input box depending on the text
-function changeInputWidth(input) {
+function changeInputWidth(input: HTMLInputElement) {
     input.style.width = getTextWidth(input.value,
         window.getComputedStyle(input).fontSize + " " +
         window.getComputedStyle(input).fontFamily
@@ -621,8 +633,9 @@ function changeInputWidth(input) {
 
 
 //used to get the exact width of a text considering the font used
-function getTextWidth(text, font) {
-    let canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+let measurementCanvas: HTMLCanvasElement;
+function getTextWidth(text: string, font: string): number {
+    let canvas: HTMLCanvasElement = measurementCanvas || (measurementCanvas = document.createElement("canvas"));
     let context = canvas.getContext("2d");
     context.font = font;
     let metrics = context.measureText(text);
@@ -655,7 +668,7 @@ function changeBestOf() {
 
 function checkRound() {
     if (!forceWL.checked) {
-        const wlButtons = document.getElementsByClassName("wlButtons");
+        const wlButtons = document.getElementsByClassName("wlButtons") as HTMLCollectionOf<HTMLDivElement>;
 
         if (roundInp.value.toLocaleUpperCase().includes("Grand".toLocaleUpperCase())) {
             for (let i = 0; i < wlButtons.length; i++) {
@@ -702,8 +715,8 @@ function swap() {
     skinP2 = tempP1Skin;
 
 
-    tempP1Score = checkScore(p1Win1, p1Win2, p1Win3);
-    tempP2Score = checkScore(p2Win1, p2Win2, p2Win3);
+    const tempP1Score = checkScore(p1Win1, p1Win2, p1Win3);
+    const tempP2Score = checkScore(p2Win1, p2Win2, p2Win3);
     setScore(tempP2Score, p1Win1, p1Win2, p1Win3);
     setScore(tempP1Score, p2Win1, p2Win2, p2Win3);
 }
@@ -726,7 +739,7 @@ function clearPlayers() {
     charImgChange(charImgP1, charP1);
     document.getElementById('skinListP1').innerHTML = '';
     document.getElementById('skinListP1Sheik').innerHTML = '';
-    document.getElementById('skinSelectorP1').style.opacity = 0;
+    (document.getElementById('skinSelectorP1') as HTMLDivElement).style.opacity = '0';
 
     document.getElementById('p2CharSelector').setAttribute('src', charPath + '/CSS/Random.png');
     charP2 = "Random";
@@ -734,16 +747,16 @@ function clearPlayers() {
     charImgChange(charImgP2, charP2);
     document.getElementById('skinListP2').innerHTML = '';
     document.getElementById('skinListP2Sheik').innerHTML = '';
-    document.getElementById('skinSelectorP2').style.opacity = 0;
+    (document.getElementById('skinSelectorP2') as HTMLDivElement).style.opacity = '0';
 
     //clear player scores
-    let checks = document.getElementsByClassName("scoreCheck");
+    let checks = document.getElementsByClassName("scoreCheck") as HTMLCollectionOf<HTMLInputElement>;
     for (let i = 0; i < checks.length; i++) {
         checks[i].checked = false;
     }
 }
 
-function setScore(score, tick1, tick2, tick3) {
+function setScore(score: number, tick1: HTMLInputElement, tick2: HTMLInputElement, tick3: HTMLInputElement) {
     tick1.checked = false;
     tick2.checked = false;
     tick3.checked = false;
@@ -760,7 +773,7 @@ function setScore(score, tick1, tick2, tick3) {
 
 
 function forceWLtoggles() {
-    const wlButtons = document.getElementsByClassName("wlButtons");
+    const wlButtons = document.getElementsByClassName("wlButtons") as HTMLCollectionOf<HTMLDivElement>;
 
         if (forceWL.checked) {
             for (let i = 0; i < wlButtons.length; i++) {
@@ -795,14 +808,14 @@ function writeScoreboard() {
         p2WL: currentP2WL,
         bestOf: currentBestOf,
         round: roundInp.value,
-        tournamentName: document.getElementById('tournamentName').value,
-        caster1Name: document.getElementById('cName1').value,
-        caster1Twitter: document.getElementById('cTwitter1').value,
-        caster1Twitch: document.getElementById('cTwitch1').value,
-        caster2Name: document.getElementById('cName2').value,
-        caster2Twitter: document.getElementById('cTwitter2').value,
-        caster2Twitch: document.getElementById('cTwitch2').value,
-        allowIntro: document.getElementById('allowIntro').checked,
+        tournamentName: tournamentNameEl.value,
+        caster1Name: caster1NameEl.value,
+        caster1Twitter: caster1TwitterEl.value,
+        caster1Twitch: caster1TwitchEl.value,
+        caster2Name: caster2NameEl.value,
+        caster2Twitter: caster2TwitterEl.value,
+        caster2Twitch: caster2TwitchEl.value,
+        allowIntro: (document.getElementById('allowIntro') as HTMLInputElement).checked,
     };
 
     let data = JSON.stringify(scoreboardJson, null, 2);
@@ -814,14 +827,14 @@ function writeScoreboard() {
     fs.writeFileSync(mainPath + "/Simple Texts/Player 2.txt", p2NameInp.value);
 
     fs.writeFileSync(mainPath + "/Simple Texts/Round.txt", roundInp.value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Tournament Name.txt", document.getElementById('tournamentName').value);
+    fs.writeFileSync(mainPath + "/Simple Texts/Tournament Name.txt", tournamentNameEl.value);
 
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Name.txt", document.getElementById('cName1').value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Twitter.txt", document.getElementById('cTwitter1').value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Twitch.txt", document.getElementById('cTwitch1').value);
+    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Name.txt", caster1NameEl.value);
+    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Twitter.txt", caster1TwitterEl.value);
+    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Twitch.txt", caster1TwitchEl.value);
 
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Name.txt", document.getElementById('cName2').value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Twitter.txt", document.getElementById('cTwitter2').value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Twitch.txt", document.getElementById('cTwitch2').value);
+    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Name.txt", caster2NameEl.value);
+    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Twitter.txt", caster2TwitterEl.value);
+    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Twitch.txt", caster2TwitchEl.value);
 
 }
