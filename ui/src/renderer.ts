@@ -6,8 +6,9 @@ window.onload = init;
 const fs = require('fs');
 const path = require('path');
 
-const mainPath = path.join(__dirname, '..', '..', 'Stream Tool', 'Resources', 'Texts');
-const charPath = path.join(__dirname, '..', '..', 'Stream Tool', 'Resources', 'Characters');
+const repoRoot = path.join(__dirname, '..', '..', '..', '..', '..', '..', '..', '..', '..')
+const textsPath = path.join(repoRoot, 'Stream Tool', 'Resources', 'Texts');
+const charPath = 'assets/Characters';
 
 //yes we all like global variables
 let charP1 = "Random";
@@ -197,7 +198,7 @@ function goBack() {
 //called whenever we need to read a json file
 function getJson(fileName: string) {
     try {
-        let settingsRaw = fs.readFileSync(mainPath + "/" + fileName + ".json");
+        let settingsRaw = fs.readFileSync(textsPath + "/" + fileName + ".json");
         return JSON.parse(settingsRaw);
     } catch (error) {
         console.error(`can't getJson("${fileName}"): ${error}`);
@@ -819,22 +820,22 @@ function writeScoreboard() {
     };
 
     let data = JSON.stringify(scoreboardJson, null, 2);
-    fs.writeFileSync(mainPath + "/ScoreboardInfo.json", data);
+    fs.writeFileSync(textsPath + "/ScoreboardInfo.json", data);
 
 
     //simple .txt files
-    fs.writeFileSync(mainPath + "/Simple Texts/Player 1.txt", p1NameInp.value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Player 2.txt", p2NameInp.value);
+    fs.writeFileSync(textsPath + "/Simple Texts/Player 1.txt", p1NameInp.value);
+    fs.writeFileSync(textsPath + "/Simple Texts/Player 2.txt", p2NameInp.value);
 
-    fs.writeFileSync(mainPath + "/Simple Texts/Round.txt", roundInp.value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Tournament Name.txt", tournamentNameEl.value);
+    fs.writeFileSync(textsPath + "/Simple Texts/Round.txt", roundInp.value);
+    fs.writeFileSync(textsPath + "/Simple Texts/Tournament Name.txt", tournamentNameEl.value);
 
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Name.txt", caster1NameEl.value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Twitter.txt", caster1TwitterEl.value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Twitch.txt", caster1TwitchEl.value);
+    fs.writeFileSync(textsPath + "/Simple Texts/Caster 1 Name.txt", caster1NameEl.value);
+    fs.writeFileSync(textsPath + "/Simple Texts/Caster 1 Twitter.txt", caster1TwitterEl.value);
+    fs.writeFileSync(textsPath + "/Simple Texts/Caster 1 Twitch.txt", caster1TwitchEl.value);
 
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Name.txt", caster2NameEl.value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Twitter.txt", caster2TwitterEl.value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Twitch.txt", caster2TwitchEl.value);
+    fs.writeFileSync(textsPath + "/Simple Texts/Caster 2 Name.txt", caster2NameEl.value);
+    fs.writeFileSync(textsPath + "/Simple Texts/Caster 2 Twitter.txt", caster2TwitterEl.value);
+    fs.writeFileSync(textsPath + "/Simple Texts/Caster 2 Twitch.txt", caster2TwitchEl.value);
 
 }
